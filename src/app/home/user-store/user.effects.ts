@@ -31,4 +31,16 @@ export class UserEffects {
       )
     )
   );
+
+  updateAllUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.updateAllUser),
+      switchMap(({ users }) =>
+        this.userService.updateAllUser(users).pipe(
+          map((users) => UserActions.loadUsersSuccess({ users })),
+          catchError((error) => of(UserActions.loadFailure({ error: error.message })))
+        )
+      )
+    )
+  );
 }

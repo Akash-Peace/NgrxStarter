@@ -19,6 +19,7 @@ export const userReducer = createReducer(
     loading: false,
     users: state.users.map((u) => (u.id === user.id ? user : u)),
     error: null
-  }))
+  })),
+  on(UserActions.updateAllUser, (state) => ({ ...state, loading: true, error: null })),
 );
 

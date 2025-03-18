@@ -5,30 +5,34 @@
         <th>Name</th>
         <th>Username</th>
         <th>Email</th>
-        <th>Actions</th>
+        <!-- <th>Actions</th> -->
       </tr>
     </thead>
     <tbody>
-      <tr [formGroup]="userForm" *ngFor="let user of users$ | async">
-        <td>{{ user.id }}</td>
-        <td>
-          <input *ngIf="editingId === user.id" formControlName="name" />
-          <span *ngIf="editingId !== user.id">{{ user.name }}</span>
-        </td>
-        <td>
-          <input *ngIf="editingId === user.id" formControlName="username" />
-          <span *ngIf="editingId !== user.id">{{ user.username }}</span>
-        </td>
-        <td>
-          <input *ngIf="editingId === user.id" formControlName="email" />
-          <span *ngIf="editingId !== user.id">{{ user.email }}</span>
-        </td>
-        <td>
-          <button *ngIf="editingId !== user.id" (click)="editUser(user)">Edit</button>
-          <button type="submit" *ngIf="editingId === user.id" (click)="saveUser()">Save</button>
-        </td>
-      </tr>
+      <div formArrayName="jsonPlace">
+        <tr [formGroupName]="i" *ngFor="let cont of usersFromArr?.controls; let i = index">
+          <td>{{ cont.value.id }}</td>
+          <td>
+            <input *ngIf="editAll" formControlName="name" />
+            <span *ngIf="!editAll">{{ cont.value.name }}</span>
+          </td>
+          <td>
+            <input *ngIf="editAll" formControlName="username" />
+            <span *ngIf="!editAll">{{ cont.value.username }}</span>
+          </td>
+          <td>
+            <input *ngIf="editAll" formControlName="email" />
+            <span *ngIf="!editAll">{{ cont.value.email }}</span>
+          </td>
+          <!-- <td>
+            <button *ngIf="editingId !== user.id" (click)="editUser(user)">Edit</button>
+            <button type="submit" *ngIf="editingId === user.id" (click)="saveUser()">Save</button>
+          </td> -->
+        </tr>
+      </div>
     </tbody>
   </table>
   <h3 *ngIf="loading$ | async">Loading...</h3>
   <h5 style="color: red;" *ngIf="error$ | async as error">{{ error }}</h5>
+  <button *ngIf="!editAll" (click)="editAllUser()">Edit All</button>
+  <button *ngIf="editAll" (click)="saveAllUser()">Save All</button>
